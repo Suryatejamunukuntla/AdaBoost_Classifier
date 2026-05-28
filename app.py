@@ -19,9 +19,7 @@ from sklearn.metrics import (
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# -----------------------------
-# Paths
-# -----------------------------
+
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -33,9 +31,6 @@ os.makedirs(RAW_DIR, exist_ok=True)
 os.makedirs(CLEAN_DIR, exist_ok=True)
 os.makedirs(MODEL_DIR, exist_ok=True)
 
-# -----------------------------
-# Streamlit Config
-# -----------------------------
 
 st.set_page_config(
     page_title="AdaBoost Classifier",
@@ -44,9 +39,6 @@ st.set_page_config(
 
 st.title("AdaBoost Classification with Breast Cancer Dataset")
 
-# -----------------------------
-# Data Ingestion
-# -----------------------------
 
 st.header("1. Data Ingestion")
 
@@ -82,9 +74,6 @@ st.success("Breast Cancer Dataset Loaded Successfully")
 
 st.dataframe(df, use_container_width=True)
 
-# -----------------------------
-# Data Cleaning
-# -----------------------------
 
 st.header("2. Data Cleaning")
 
@@ -138,9 +127,7 @@ if st.button("Save Cleaned Dataset"):
 
     st.success("Dataset Saved Successfully")
 
-# -----------------------------
-# Load Cleaned Dataset
-# -----------------------------
+
 
 st.header("3. Load Cleaned Dataset")
 
@@ -165,9 +152,7 @@ data = pd.read_csv(
 
 st.dataframe(data, use_container_width=True)
 
-# -----------------------------
-# Sidebar Settings
-# -----------------------------
+
 
 st.sidebar.header("Model Settings")
 
@@ -199,9 +184,6 @@ random_state = st.sidebar.slider(
     42
 )
 
-# -----------------------------
-# Prepare Data
-# -----------------------------
 
 X = data.drop(columns=["TARGET"])
 y = data["TARGET"]
@@ -222,9 +204,6 @@ X_train, X_test, y_train, y_test = train_test_split(
     random_state=random_state
 )
 
-# -----------------------------
-# Model Setup
-# -----------------------------
 
 base_tree = DecisionTreeClassifier(
     max_depth=3,
@@ -237,18 +216,14 @@ model = AdaBoostClassifier(
     n_estimators=100
 )
 
-# -----------------------------
-# Hyperparameter Grid
-# -----------------------------
+
 
 param_grid = {
     "n_estimators": [50, 100, 200, 300],
     "learning_rate": [0.01, 0.1, 0.5, 1.0]
 }
 
-# -----------------------------
-# Randomized Search CV
-# -----------------------------
+
 
 st.header("4. Randomized Search CV Training")
 
@@ -266,9 +241,6 @@ search.fit(X_train, y_train)
 
 best_model = search.best_estimator_
 
-# -----------------------------
-# Predictions
-# -----------------------------
 
 pred = best_model.predict(X_test)
 
@@ -282,9 +254,7 @@ st.write(search.best_params_)
 st.write("Best CV Score:")
 st.write(search.best_score_)
 
-# -----------------------------
-# Classification Report
-# -----------------------------
+
 
 st.header("5. Classification Report")
 
@@ -298,9 +268,7 @@ report_df = pd.DataFrame(report).transpose()
 
 st.dataframe(report_df, use_container_width=True)
 
-# -----------------------------
-# Confusion Matrix
-# -----------------------------
+
 
 st.header("6. Confusion Matrix")
 
@@ -321,9 +289,7 @@ ax.set_ylabel("Actual")
 
 st.pyplot(fig)
 
-# -----------------------------
-# Feature Importance
-# -----------------------------
+
 
 st.header("7. Feature Importance")
 
@@ -358,9 +324,6 @@ st.dataframe(
     use_container_width=True
 )
 
-# -----------------------------
-# Save Model
-# -----------------------------
 
 st.header("8. Save Model")
 
@@ -376,9 +339,7 @@ st.success(
     f"Model Saved At: {model_path}"
 )
 
-# -----------------------------
-# Sample Predictions
-# -----------------------------
+
 
 st.header("9. Sample Predictions")
 
